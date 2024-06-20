@@ -1,3 +1,8 @@
 export interface OfflineMapPlugin {
-  echo(options: { value: string }): Promise<{ value: string }>;
+  showMap(options: {
+    latitude: number;
+    longitude: number;
+    zoom: number;
+  }): Promise<void>;
+  initialize(options: { accessToken: string }): Promise<void>;
 }

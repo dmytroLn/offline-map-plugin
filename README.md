@@ -11,9 +11,39 @@ npx cap sync
 
 ## API
 
-<docgen-index></docgen-index>
+<docgen-index>
+
+* [`showMap(...)`](#showmap)
+* [`initialize(...)`](#initialize)
+
+</docgen-index>
 
 <docgen-api>
-<!-- run docgen to generate docs from the source -->
-<!-- More info: https://github.com/ionic-team/capacitor-docgen -->
+<!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+
+### showMap(...)
+
+```typescript
+showMap(options: { latitude: number; longitude: number; zoom: number; }) => Promise<void>
+```
+
+| Param         | Type                                                                |
+| ------------- | ------------------------------------------------------------------- |
+| **`options`** | <code>{ latitude: number; longitude: number; zoom: number; }</code> |
+
+--------------------
+
+
+### initialize(...)
+
+```typescript
+initialize(options: { accessToken: string; }) => Promise<void>
+```
+
+| Param         | Type                                  |
+| ------------- | ------------------------------------- |
+| **`options`** | <code>{ accessToken: string; }</code> |
+
+--------------------
+
 </docgen-api>
