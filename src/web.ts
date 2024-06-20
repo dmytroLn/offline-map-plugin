@@ -11,24 +11,18 @@ export class OfflineMapWeb extends WebPlugin implements OfflineMapPlugin {
   }
 
   async showMap(options: {
-    latitude: number;
-    longitude: number;
+    container: string;
+    style: string;
+    center: [number, number];
     zoom: number;
   }): Promise<void> {
-    if (this.map) {
-      this.map.remove();
-    }
-
-    const mapContainer = document.createElement('div');
-    mapContainer.style.width = '100%';
-    mapContainer.style.height = '100vh';
-    document.body.appendChild(mapContainer);
-
     this.map = new mapboxgl.Map({
-      container: mapContainer,
-      style: 'mapbox://styles/mapbox/streets-v11',
-      center: [options.longitude, options.latitude],
+      container: options.container,
+      style: options.style,
+      center: options.center,
       zoom: options.zoom,
     });
+
+    this.map.addControl(new mapboxgl.NavigationControl());
   }
 }

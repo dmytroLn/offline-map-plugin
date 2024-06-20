@@ -24,12 +24,12 @@ npx cap sync
 ### showMap(...)
 
 ```typescript
-showMap(options: { latitude: number; longitude: number; zoom: number; }) => Promise<void>
+showMap(options: { container: string; style: string; center: [number, number]; zoom: number; }) => Promise<void>
 ```
 
-| Param         | Type                                                                |
-| ------------- | ------------------------------------------------------------------- |
-| **`options`** | <code>{ latitude: number; longitude: number; zoom: number; }</code> |
+| Param         | Type                                                                                       |
+| ------------- | ------------------------------------------------------------------------------------------ |
+| **`options`** | <code>{ container: string; style: string; center: [number, number]; zoom: number; }</code> |
 
 --------------------
 
