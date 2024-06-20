@@ -5,12 +5,7 @@ import type { OfflineMapPlugin } from './definitions';
 
 export class OfflineMapWeb extends WebPlugin implements OfflineMapPlugin {
   private map: mapboxgl.Map | null = null;
-  constructor() {
-    super({
-      name: 'MapboxPlugin',
-      platforms: ['web'],
-    });
-  }
+
   async initialize(options: { accessToken: string }): Promise<void> {
     mapboxgl.accessToken = options.accessToken;
   }
