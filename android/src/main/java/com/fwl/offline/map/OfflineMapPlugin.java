@@ -7,12 +7,10 @@ import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.annotation.CapacitorPlugin;
-// import com.getcapacitor.annotation.PluginMethod;
 import com.mapbox.common.MapboxOptions;
 import com.mapbox.maps.MapView;
 import com.mapbox.maps.Style;
 import com.mapbox.maps.MapInitOptions;
-//import com.mapbox.maps.MapboxOptions;
 
 @CapacitorPlugin(name = "OfflineMap")
 public class OfflineMapPlugin extends Plugin {
@@ -33,7 +31,6 @@ public class OfflineMapPlugin extends Plugin {
         getActivity().runOnUiThread(() -> {
             mapView = new MapView(getContext());
             mapView.getMapboxMap().loadStyleUri(style);
-            // Додаємо mapView до вью хієрархії активності
             getActivity().setContentView(mapView);
         });
 
