@@ -12,11 +12,35 @@ import com.mapbox.maps.MapView;
 import com.mapbox.maps.Style;
 import com.mapbox.maps.MapInitOptions;
 
+import android.os.StrictMode;
+import android.util.Log;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.webkit.WebView;
+import com.getcapacitor.Bridge;
+
+import android.annotation.SuppressLint;
+import android.graphics.*;
+import android.location.Location;
+import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import com.getcapacitor.Bridge;
+import com.getcapacitor.JSArray;
+import com.getcapacitor.JSObject;
+import kotlinx.coroutines.*;
+import kotlinx.coroutines.channels.Channel;
+import java.io.InputStream;
+import java.net.URL;
+
 @CapacitorPlugin(name = "OfflineMap")
 public class OfflineMapPlugin extends Plugin {
     private MapView mapView;
     private String accessToken = "sk.eyJ1IjoiZG15dHJvMTIzNDEyMyIsImEiOiJjbHhtMmd3dG4wM3djMmhzZHRhZnc1ZzZpIn0.M2RaPi22pc6CeJ4O5LAk5w";
-
+    private static final String TAG = "MapboxPlugin";
+    
     @PluginMethod
     public void initialize(PluginCall call) {
         // accessToken = call.getString("accessToken");
@@ -24,17 +48,70 @@ public class OfflineMapPlugin extends Plugin {
         call.resolve();
     }
 
-    @PluginMethod
+    // @PluginMethod
+    // public void showMap(PluginCall call) {
+    //     String style = call.getString("style");
+
+    //     getActivity().runOnUiThread(() -> {
+    //         mapView = new MapView(getContext());
+    //         mapView.getMapboxMap().loadStyleUri(style);
+    //         getActivity().setContentView(mapView);
+    //     });
+
+    //     call.resolve();
+    // }
+    
+     @PluginMethod
     public void showMap(PluginCall call) {
         String style = call.getString("style");
+        String containerId = call.getString("container");
 
+         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+         StrictMode.setThreadPolicy(policy);
+
+
+         try {
         getActivity().runOnUiThread(() -> {
             mapView = new MapView(getContext());
+            var bridge = this.bridge;
+            if (bridge == null || bridge.getWebView() == null) {
+                Log.e(TAG, "Bridge or WebView is null");
+                return;
+            }
+            FrameLayout mapViewParent = new FrameLayout(bridge.getContext());
+            mapViewParent.setMinimumHeight(bridge.getWebView().getHeight());
+            mapViewParent.setMinimumWidth(bridge.getWebView().getWidth());
+
+            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
+                    getScaledPixels(bridge, 100),
+                    getScaledPixels(bridge, 200)
+            );
+            layoutParams.leftMargin = getScaledPixels(bridge, 100);
+            layoutParams.topMargin = getScaledPixels(bridge, 100);
+
+
+            mapViewParent.setTag("id");
+            mapView.setLayoutParams(layoutParams);
+            mapViewParent.addView(mapView);
+            ((ViewGroup) bridge.getWebView().getParent()).addView(mapViewParent);
+            bridge.getWebView().bringToFront();
+            bridge.getWebView().setBackgroundColor(Color.TRANSPARENT);
+            mapViewParent.bringToFront();
             mapView.getMapboxMap().loadStyleUri(style);
-            getActivity().setContentView(mapView);
+
         });
+         } catch (Exception e) {
+             Log.e(TAG, "Error in render method", e);
+         }
 
         call.resolve();
+    }
+
+    private int getScaledPixels(Bridge bridge, int pixels) {
+        // Get the screen's density scale
+        float scale = bridge.getActivity().getResources().getDisplayMetrics().density;
+        // Convert the dps to pixels, based on density scale
+        return (int) (pixels * scale + 0.5f);
     }
 
 }
