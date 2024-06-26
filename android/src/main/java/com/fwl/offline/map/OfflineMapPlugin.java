@@ -43,41 +43,19 @@ public class OfflineMapPlugin extends Plugin {
     
     @PluginMethod
     public void initialize(PluginCall call) {
-        // accessToken = call.getString("accessToken");
         MapboxOptions.setAccessToken(accessToken);
         call.resolve();
     }
 
-    // @PluginMethod
-    // public void showMap(PluginCall call) {
-    //     String style = call.getString("style");
-
-    //     getActivity().runOnUiThread(() -> {
-    //         mapView = new MapView(getContext());
-    //         mapView.getMapboxMap().loadStyleUri(style);
-    //         getActivity().setContentView(mapView);
-    //     });
-
-    //     call.resolve();
-    // }
-    
      @PluginMethod
     public void showMap(PluginCall call) {
         String style = call.getString("style");
         String containerId = call.getString("container");
 
-         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-         StrictMode.setThreadPolicy(policy);
-
-
          try {
         getActivity().runOnUiThread(() -> {
             mapView = new MapView(getContext());
             var bridge = this.bridge;
-            if (bridge == null || bridge.getWebView() == null) {
-                Log.e(TAG, "Bridge or WebView is null");
-                return;
-            }
             FrameLayout mapViewParent = new FrameLayout(bridge.getContext());
             mapViewParent.setMinimumHeight(bridge.getWebView().getHeight());
             mapViewParent.setMinimumWidth(bridge.getWebView().getWidth());
@@ -108,9 +86,7 @@ public class OfflineMapPlugin extends Plugin {
     }
 
     private int getScaledPixels(Bridge bridge, int pixels) {
-        // Get the screen's density scale
         float scale = bridge.getActivity().getResources().getDisplayMetrics().density;
-        // Convert the dps to pixels, based on density scale
         return (int) (pixels * scale + 0.5f);
     }
 
